@@ -10,6 +10,7 @@ public class Carrinho {
     private final ArrayList<Produto>produtos;
 
     static double total = 0;
+    static double totalComDesconto = 0;
 
     public Carrinho(){
 
@@ -18,32 +19,30 @@ public class Carrinho {
     }
 
 
+    //adicionar produto
+    public Produto AdicionarProduto(String nomeProduto, double preco, int quantidade,double percentualDesconto) {
 
-    public void AdicionarProduto(String nomeProduto, double preco, int quantidade) {
-
-        Produto produto = new Produto(nomeProduto, preco, quantidade);
+        Produto produto = new Produto(nomeProduto, preco,quantidade,percentualDesconto);
         produtos.add(produto);
-
-
-        System.out.println("Deseja aplicar desconto: (S/N) ");
-        String desconto = test.next();
-
-
-        System.out.println("Digite o porcentual: ");
-        double aplicarValorAtualizado = test.nextDouble();
-        produto.aplicarDesconto(aplicarValorAtualizado);
-
+        return produto;
     }
 
+    //listar produto
     public void mostarResumo(){
+
         for (Produto i : produtos){
-            total += i.getPreco() * i.getQuantidade();
+            total += i.getPreco() * i.getQuantidade(); // retornando o preço e quantidade e colocando em uma váriavel
             System.out.println(i);
         }
+
+        for (Produto deconto : produtos){
+            totalComDesconto += deconto.getPrecoComDescontoUnitario(); //colocando o desconto unitario na váriavel com desconto
+        }
         System.out.println("total compra: " + total);
+        System.out.println("total da compra com desconto: " + totalComDesconto);
     }
 
-    public Produto buscar(String nomeProduto){
+    public Produto buscar(String nomeProduto){ //filtrando produto para conseguir utilizar a função de remover
         for (Produto i:produtos){
             if (i.getNome().equalsIgnoreCase(nomeProduto)){
                 return i;
@@ -52,6 +51,7 @@ public class Carrinho {
         return null;
     }
 
+    //remover
     public void removerProduto(String nomeProduto){
         try {
             Produto produto = buscar(nomeProduto);
@@ -69,7 +69,14 @@ public class Carrinho {
     public static void main (String[] args){
         Scanner sc = new Scanner(System.in);
 
-        Cliente renan = new Cliente("renan.mewekd2k017@gmail.com","Renan");
+        System.out.println("Digite seu nome: ");
+        String nomeUsuario = sc.nextLine();
+
+        System.out.println("Digite seu email: ");
+        String emailUsuario = sc.nextLine();
+
+        Cliente novoCliente = new Cliente(nomeUsuario,emailUsuario);
+        novoCliente.mostrarDados(); // mostrar dados somente do usuario
 
         Carrinho ecommerce = new Carrinho();
 
@@ -78,7 +85,7 @@ public class Carrinho {
         while(status != false){
             System.out.println("- 1 adicionar produto ");
             System.out.println("- 2 remover produto ");
-            System.out.println("- 3 listar produto");
+            System.out.println("- 3 Mostrar Resumo da compra");
             System.out.println("- 4 sair");
 
             System.out.println("Digite a opção que você deseja: ");
@@ -95,7 +102,10 @@ public class Carrinho {
                     System.out.println("Digie a quantidade do produto");
                     int quantidadeProduto = sc.nextInt();
 
-                    ecommerce.AdicionarProduto(nomeProduto,precoProduto,quantidadeProduto);
+                    System.out.println("Digite o percentual do produto: ");
+                    double percentualProduto = sc.nextDouble();
+
+                    ecommerce.AdicionarProduto(nomeProduto,precoProduto,quantidadeProduto,percentualProduto);
 
 
 

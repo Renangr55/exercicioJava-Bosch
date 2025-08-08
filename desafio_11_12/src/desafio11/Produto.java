@@ -6,12 +6,17 @@ public class Produto {
     private double preco;
     private int quantidade;
 
-    private double precoAtualizado = preco;
+    private double porcentagem;
 
-    public Produto(String nome, double preco, int quantidade){
+    private double precoAtualizado;
+    private double precoComDescontoUnitario;
+
+    public Produto(String nome, double preco, int quantidade,double porcentagem){
         this.nome = nome;
         this.preco = preco;
         this.quantidade = quantidade;
+        this.porcentagem = porcentagem;
+
 
 
     }
@@ -23,26 +28,28 @@ public class Produto {
         return preco;
     }
 
+    public Double getPorcentagem(){
+        return porcentagem;
+    }
+
     public int getQuantidade(){
         return quantidade;
     }
 
-    public void setNome(String nome){
-        this.nome = nome;
+
+
+    public double getPrecoComDesconto(){ //caluculando preço de apenas 1 valor
+        double conversao = porcentagem / 100;
+        precoAtualizado =  preco * conversao;
+        return precoAtualizado;
     }
-    public void setPreco(float preco){
-        this.preco = preco;
-    }
-    public void setQuantidade(int quantidade){
-        this.quantidade = quantidade;
+    public double getPrecoComDescontoUnitario(){
+        return preco * (1 - porcentagem / 100.0) * quantidade; //caluculando preço unitário de cada produto
     }
 
-    public Double aplicarDesconto (double percentual){
-        return (precoAtualizado * percentual) / 100;
-    }
 
     @Override
     public String toString(){
-        return "nome: " + nome + "| preço: " +  preco + "| Quantidade: " +  quantidade + "| preço atualizado: " + precoAtualizado;
+        return "nome: " + nome + "| preço: " +  preco + "| Quantidade: " +  quantidade + "| valor com desconto sem ser unitario: " + getPrecoComDesconto() ;
     }
 }
